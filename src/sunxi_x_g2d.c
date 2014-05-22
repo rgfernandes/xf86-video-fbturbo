@@ -263,18 +263,20 @@ static void xPutImage(DrawablePtr pDrawable,
     for (nbox = RegionNumRects(pClip),
         pbox = RegionRects(pClip); nbox--; pbox++) {
         x1 = x;
-        y1 = y;
         x2 = x + w;
-        y2 = y + h;
         if (x1 < pbox->x1)
             x1 = pbox->x1;
-        if (y1 < pbox->y1)
-            y1 = pbox->y1;
         if (x2 > pbox->x2)
             x2 = pbox->x2;
+        if (x1 >= x2)
+            continue;
+        y1 = y;
+        y2 = y + h;
+        if (y1 < pbox->y1)
+            y1 = pbox->y1;
         if (y2 > pbox->y2)
             y2 = pbox->y2;
-        if (x1 >= x2 || y1 >= y2)
+        if (y1 >= y2)
             continue;
         Bool done = FALSE;
         int w = x2 - x1;

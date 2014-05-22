@@ -154,7 +154,7 @@ xPutImage(ScrnInfoPtr pScrn, short src_x, short src_y, short drw_x, short drw_y,
 
     uv_stride = SIMD_ALIGN(width >> 1);
     y_stride  = uv_stride * 2;
-    yuv_size  = y_stride * height + uv_stride * height;
+    yuv_size  = (y_stride + uv_stride) * height;
 
     y_offset = 0;
     if (image == FOURCC_I420) {
@@ -231,7 +231,7 @@ xQueryImageAttributes(ScrnInfoPtr pScrn, int image,
 
     uv_stride = SIMD_ALIGN(width >> 1);
     y_stride  = uv_stride * 2;
-    yuv_size  = y_stride * height + uv_stride * height;
+    yuv_size  = (y_stride + uv_stride) * height;
 
     if (pitches) {
         pitches[0] = y_stride;

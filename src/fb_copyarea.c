@@ -94,24 +94,24 @@ fb_copyarea_t *fb_copyarea_init(const char *device, void *xserver_fbmem)
         return NULL;
     }
 
-    /* store the already existing mapping done by xserver */
-    ctx->xserver_fbmem = xserver_fbmem;
-
     ctx->xres = fb_var.xres;
     ctx->yres = fb_var.yres;
-    ctx->bits_per_pixel = fb_var.bits_per_pixel;
-    ctx->framebuffer_paddr = fb_fix.smem_start;
-    ctx->framebuffer_size = fb_fix.smem_len;
-    ctx->framebuffer_height = ctx->framebuffer_size /
-                              (ctx->xres * ctx->bits_per_pixel / 8);
     ctx->gfx_layer_size = ctx->xres * ctx->yres * fb_var.bits_per_pixel / 8;
-    ctx->framebuffer_stride = fb_fix.line_length / 4;
-
     if (ctx->framebuffer_size < ctx->gfx_layer_size) {
         close(ctx->fd);
         free(ctx);
         return NULL;
     }
+
+    /* store the already existing mapping done by xserver */
+    ctx->xserver_fbmem = xserver_fbmem;
+
+    ctx->bits_per_pixel = fb_var.bits_per_pixel;
+    ctx->framebuffer_paddr = fb_fix.smem_start;
+    ctx->framebuffer_size = fb_fix.smem_len;
+    ctx->framebuffer_height = ctx->framebuffer_size /
+                              (ctx->xres * ctx->bits_per_pixel / 8);
+    ctx->framebuffer_stride = fb_fix.line_length / 4;
 
     if (ctx->xserver_fbmem) {
         /* use already existing mapping */
